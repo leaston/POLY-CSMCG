@@ -486,7 +486,7 @@ class Ui_dashboard_window(object):
             "    font: 16pt \"Century Gothic\";\n"
             "}")
         self.manage_users_btn.setObjectName("manage_users_btn")
-        self.manage_users_btn.setVisible(False)  # Par défaut, caché
+        # self.manage_users_btn.setVisible(False)  # Par défaut, caché
 
         self.horizontalLayoutWidget_3 = QtWidgets.QWidget(self.patient_tab)
         self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(11, 10, 1231, 51))
@@ -728,8 +728,10 @@ class Ui_dashboard_window(object):
             "    font: 16pt \"Century Gothic\";\n"
             "}")
         self.add_btn.setObjectName("add_btn")
+        # self.add_btn.setVisible(False)
         self.edit_btn = QtWidgets.QPushButton(self.tasaisie_identite_tab)
         self.edit_btn.setGeometry(QtCore.QRect(839, 360, 191, 41))
+        # self.edit_btn.setVisible(False)
         self.edit_btn.setStyleSheet("QPushButton{\n"
                                     "    background-color: rgb(13,110,253);\n"
                                     "    border-radius: 3px;\n"
@@ -748,6 +750,7 @@ class Ui_dashboard_window(object):
         self.edit_btn.setObjectName("edit_btn")
         self.del_btn = QtWidgets.QPushButton(self.tasaisie_identite_tab)
         self.del_btn.setGeometry(QtCore.QRect(1039, 360, 191, 41))
+        # self.del_btn.setVisible(False)
         self.del_btn.setStyleSheet("QPushButton{\n"
                                    "    background-color:  orange;\n"
                                    "    border-radius: 3px;\n"
@@ -1019,6 +1022,7 @@ class Ui_dashboard_window(object):
         self.line_2.setObjectName("line_2")
         self.add_btn_2 = QtWidgets.QPushButton(self.saisie_diagnostic_tab)
         self.add_btn_2.setGeometry(QtCore.QRect(639, 360, 191, 41))
+        # self.add_btn_2.setVisible(False)
         self.add_btn_2.setStyleSheet("QPushButton{\n"
                                      "    background-color:  rgb(25,135,84);\n"
                                      "    border-radius: 3px;\n"
@@ -1037,6 +1041,7 @@ class Ui_dashboard_window(object):
         self.add_btn_2.setObjectName("add_btn_2")
         self.edit_btn_2 = QtWidgets.QPushButton(self.saisie_diagnostic_tab)
         self.edit_btn_2.setGeometry(QtCore.QRect(839, 360, 191, 41))
+        # self.edit_btn_2.setVisible(False)
         self.edit_btn_2.setStyleSheet("QPushButton{\n"
                                       "    background-color: rgb(13,110,253);\n"
                                       "    border-radius: 3px;\n"
@@ -1055,6 +1060,7 @@ class Ui_dashboard_window(object):
         self.edit_btn_2.setObjectName("edit_btn_2")
         self.del_btn_2 = QtWidgets.QPushButton(self.saisie_diagnostic_tab)
         self.del_btn_2.setGeometry(QtCore.QRect(1039, 360, 191, 41))
+        # self.del_btn_2.setVisible(False)
         self.del_btn_2.setStyleSheet("QPushButton{\n"
                                      "    background-color:  orange;\n"
                                      "    border-radius: 3px;\n"
@@ -1264,10 +1270,53 @@ class Ui_dashboard_window(object):
         dashboard_window.name_user_auth_lbl.setText(f"{username.capitalize()} - {authorization_level.capitalize()}")
         dashboard_window.name_user_auth_lbl.setStyleSheet("font-size: 16px; font-style: italic; color: #ff0000;")
 
+        # Liste des boutons à gérer
+        admin_buttons = [
+            dashboard_window.manage_users_btn,
+            dashboard_window.add_btn,
+            dashboard_window.add_btn_2,
+            dashboard_window.edit_btn,
+            dashboard_window.edit_btn_2,
+            dashboard_window.del_btn,
+            dashboard_window.del_btn_2
+        ]
+
         # Afficher le bouton "Gestion des identifiants" uniquement pour les administrateurs
         if authorization_level.capitalize() == "Administrateur - 0":
-            dashboard_window.manage_users_btn.setVisible(True)
+            for btn in admin_buttons:
+                btn.setVisible(True)
+            # Connexions uniques pour éviter les doubles connexions
+            dashboard_window.manage_users_btn.clicked.disconnect() if dashboard_window.manage_users_btn.receivers(
+                dashboard_window.manage_users_btn.clicked) else None
             dashboard_window.manage_users_btn.clicked.connect(dashboard_window.open_manage_users_popup)
+
+            dashboard_window.add_btn.clicked.disconnect() if dashboard_window.add_btn.receivers(
+                dashboard_window.add_btn.clicked) else None
+            dashboard_window.add_btn.clicked.connect(dashboard_window.add_data)
+
+            dashboard_window.add_btn_2.clicked.disconnect() if dashboard_window.add_btn_2.receivers(
+                dashboard_window.add_btn_2.clicked) else None
+            dashboard_window.add_btn_2.clicked.connect(dashboard_window.add_data)
+
+            dashboard_window.del_btn.clicked.disconnect() if dashboard_window.del_btn.receivers(
+                dashboard_window.del_btn.clicked) else None
+            dashboard_window.del_btn.clicked.connect(dashboard_window.delete_data)
+
+            dashboard_window.del_btn_2.clicked.disconnect() if dashboard_window.del_btn_2.receivers(
+                dashboard_window.del_btn_2.clicked) else None
+            dashboard_window.del_btn_2.clicked.connect(dashboard_window.delete_data)
+
+            dashboard_window.edit_btn.clicked.disconnect() if dashboard_window.edit_btn.receivers(
+                dashboard_window.edit_btn.clicked) else None
+            dashboard_window.edit_btn.clicked.connect(dashboard_window.perform_update)
+
+            dashboard_window.edit_btn_2.clicked.disconnect() if dashboard_window.edit_btn_2.receivers(
+                dashboard_window.edit_btn_2.clicked) else None
+            dashboard_window.edit_btn_2.clicked.connect(dashboard_window.perform_update)
+        else:
+            # Rendre les boutons invisibles pour les non-administrateurs
+            for btn in admin_buttons:
+                btn.setVisible(False)
 
     def open_manage_users_popup(self):
         """Ouvre le popup de gestion des identifiants des utilisateurs avec corrections pour ajout et modification."""
@@ -1768,11 +1817,11 @@ class Ui_dashboard_window(object):
         # Connectez le signal textChanged à la fonction de recherche
         self.search_lineEdit.textChanged.connect(self.on_search_text_changed)
         self.search_lineEdit_2.textChanged.connect(self.search_data_in_widgets)
-        self.add_btn.clicked.connect(self.add_data)
-        self.add_btn_2.clicked.connect(self.add_data)
-
-        self.del_btn.clicked.connect(self.delete_data)
-        self.del_btn_2.clicked.connect(self.delete_data)
+        # self.add_btn.clicked.connect(self.add_data)
+        # self.add_btn_2.clicked.connect(self.add_data)
+        #
+        # self.del_btn.clicked.connect(self.delete_data)
+        # self.del_btn_2.clicked.connect(self.delete_data)
 
         self.erase_all_widgets_btn.clicked.connect(self.reset_all_fields)
         self.erase_all_widgets_btn_2.clicked.connect(self.reset_all_fields)
@@ -1780,8 +1829,8 @@ class Ui_dashboard_window(object):
         self.refresh_btn.clicked.connect(self.get_data)
         # self.quit_btn.clicked.connect(self.close)
 
-        self.edit_btn.clicked.connect(self.perform_update)
-        self.edit_btn_2.clicked.connect(self.perform_update)
+        # self.edit_btn.clicked.connect(self.perform_update)
+        # self.edit_btn_2.clicked.connect(self.perform_update)
 
         # Connectez l'événement de clic de la table à votre fonction de gestion
         self.restitute_tbl.cellClicked.connect(self.show_popup_on_click)
