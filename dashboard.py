@@ -97,7 +97,8 @@ class CustomValidatorHandler(QObject):
 
             # Exemple pour `phone_ledit`
             if obj.objectName() == "phone_ledit":
-                if not (key.isdigit() or key == "+"):  # Si l'utilisateur entre une lettre ou un caractère spécial
+                if not (key.isdigit() or key == "+" or event.key() in [Qt.Key_Backspace, Qt.Key_Delete, Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down, Qt.Key_Tab]):  # Si l'utilisateur entre une lettre ou un caractère spécial
+                    # Si l'utilisateur entre une lettre ou un caractère spécial
                     msg = QMessageBox(obj)
                     msg.setWindowTitle("Entrée non valide")
                     msg.setText("Vous ne pouvez entrer que des chiffres et le signe +.")
@@ -128,7 +129,8 @@ class CustomValidatorHandler(QObject):
 
             # Exemple pour `temp_ledit` et les champs numériques
             if obj.objectName() in ["temp_ledit", "tabg_ledit", "tabd_ledit", "bg_ledit", "weight_ledit"]:
-                if not (key.isdigit() or key == "."):  # Si l'utilisateur entre une lettre ou un caractère spécial
+                if not (key.isdigit() or key == "." or event.key() in [Qt.Key_Backspace, Qt.Key_Delete, Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down, Qt.Key_Tab]):  # Si l'utilisateur entre une lettre ou un caractère spécial
+                    # Si l'utilisateur entre une lettre ou un caractère spécial
                     msg = QMessageBox(obj)
                     msg.setWindowTitle("Entrée non valide")
                     msg.setText("Vous ne pouvez entrer que des chiffres et le point (.).")
@@ -2744,10 +2746,10 @@ class Ui_dashboard_window(object):
         apply_alternate_colors()
 
         # Ajouter les boutons de navigation et de fermeture
-        prev_button = QPushButton("←")
-        next_button = QPushButton("→")
-        close_button = QPushButton("Fermer")
-        close_button.clicked.connect(popup_dialog.close)
+        prev_pop_btn = QPushButton("←")
+        next_pop_btn = QPushButton("→")
+        close_pop_btn = QPushButton("Fermer")
+        close_pop_btn.clicked.connect(popup_dialog.close)
 
         # Ajouter la logique de navigation
         def navigate(direction):
@@ -2768,17 +2770,17 @@ class Ui_dashboard_window(object):
 
             apply_alternate_colors()
 
-        prev_button.clicked.connect(lambda: navigate("prev"))
-        next_button.clicked.connect(lambda: navigate("next"))
-        close_button.clicked.connect(popup_dialog.close)
+        prev_pop_btn.clicked.connect(lambda: navigate("prev"))
+        next_pop_btn.clicked.connect(lambda: navigate("next"))
+        close_pop_btn.clicked.connect(popup_dialog.close)
 
         # Créer une disposition horizontale pour les flèches et le bouton de fermeture
         nav_layout = QHBoxLayout()
-        nav_layout.addWidget(prev_button)
+        nav_layout.addWidget(prev_pop_btn)
         nav_layout.addStretch()
-        nav_layout.addWidget(close_button)
+        nav_layout.addWidget(close_pop_btn)
         nav_layout.addStretch()
-        nav_layout.addWidget(next_button)
+        nav_layout.addWidget(next_pop_btn)
 
         # Créer la disposition
         layout = QVBoxLayout()

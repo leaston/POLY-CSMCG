@@ -7,7 +7,7 @@ Created on Wed Dec 01 14:25:59 2023
 import sys
 import sqlite3
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from PyQt5.QtWidgets import QApplication
 from os import path
@@ -15,7 +15,19 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtCore import Qt
 from dashboard import Ui_dashboard_window
 
-FORM_CLASS, _ = loadUiType(path.join(path.dirname('__file__'), "login_csmcg.ui"))
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = path.abspath(".")
+
+    return path.join(base_path, relative_path)
+
+
+FORM_CLASS, _ = loadUiType(resource_path("login_csmcg.ui"))
 
 
 class Main(QMainWindow, FORM_CLASS):
@@ -45,6 +57,27 @@ class Main(QMainWindow, FORM_CLASS):
         # Positionner la fenêtre
         self.move(window_geometry.topLeft())
 
+    def retranslateUi(self, LoginWindow):
+        _translate = QtCore.QCoreApplication.translate
+        LoginWindow.setWindowTitle(_translate("LoginWindow", "Centre des Soins Médicaux la Croix Glorieuse -CSM-CG"))
+        self.label_titre_cx.setText(_translate("LoginWindow", "Vous devez vous connecter"))
+        self.infos_csmcg_lbl.setText(_translate("LoginWindow",
+                                                "Cabinet de Soins Médicaux \"LA CROIX GLORIEUSE\" Secteur 16 - Song Naba - 05 bp 6592 Ouagadougou - Tél. +226 70 27 05 02 / 77 25 76 65 - Email : santeglorieuse@yahoo.fr"))
+        self.infos_csmcg_lbl_2.setText(_translate("LoginWindow", "Cabinet de Soins Médicaux \"LA CROIX GLORIEUSE\" "))
+        self.cx_btn.setText(_translate("LoginWindow", "Se Connecter"))
+        self.comboBox_niveau.setItemText(0, _translate("LoginWindow", "Choisir votre niveau de rôle"))
+        self.comboBox_niveau.setItemText(1, _translate("LoginWindow", "Administrateur - 0"))
+        self.comboBox_niveau.setItemText(2, _translate("LoginWindow", "Superviseur - 1"))
+        self.comboBox_niveau.setItemText(3, _translate("LoginWindow", "Utilisateur - 2"))
+        self.user_level_lbl.setText(_translate("LoginWindow", "Niveau"))
+        self.login_lbl.setText(_translate("LoginWindow", "Login"))
+        self.login_lineEdit.setPlaceholderText(_translate("LoginWindow", "Nom d\'utilisateur"))
+        self.mdp_lbl.setText(_translate("LoginWindow", "Mot de passe"))
+        self.mdp_lineEdit.setPlaceholderText(_translate("LoginWindow", "Mot de passe"))
+        self.Consultation_lbl.setText(_translate("LoginWindow", "Consultation médical"))
+        self.label.setText(_translate("LoginWindow",
+                                      "<html><head/><body><div align=\"center\">Cabinet de Soins Médicaux</div><div align=\"center\"><strong>LA CROIX GLORIEUSE</strong></div></body></html>"))
+
     def showEvent(self, event):
         super(Main, self).showEvent(event)
         self.login_lineEdit.setFocus()
@@ -62,9 +95,8 @@ class Main(QMainWindow, FORM_CLASS):
         self.cx_btn.clicked.connect(self.returnButtonPressed)
 
     def connexion_bdd(self, login_lineEdit, mdp_lineEdit, comboBox_niveau, LoginWindow):
-        db = sqlite3.connect("croixg.db")
+        db = sqlite3.connect(resource_path("croixg.db"))
         cursor = db.cursor()
-
 
         # Vérifier les identifiants de connexion dans la base de données
         cursor.execute(
@@ -134,8 +166,6 @@ class Main(QMainWindow, FORM_CLASS):
             )
             msg.exec_()
             return True
-        # Dans la méthode connexion_bdd
-        # self.current_user = username  # Stocker le nom d'utilisateur actuellement connecté
 
     def show_mes_consultations_window(self):
         # print("Ouverture de la fenêtre ConsultationMain")
