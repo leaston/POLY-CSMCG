@@ -97,7 +97,9 @@ class CustomValidatorHandler(QObject):
 
             # Exemple pour `phone_ledit`
             if obj.objectName() == "phone_ledit":
-                if not (key.isdigit() or key == "+" or event.key() in [Qt.Key_Backspace, Qt.Key_Delete, Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down, Qt.Key_Tab]):  # Si l'utilisateur entre une lettre ou un caractère spécial
+                if not (key.isdigit() or key == "+" or event.key() in [Qt.Key_Backspace, Qt.Key_Delete, Qt.Key_Left,
+                                                                       Qt.Key_Right, Qt.Key_Up, Qt.Key_Down,
+                                                                       Qt.Key_Tab]):  # Si l'utilisateur entre une lettre ou un caractère spécial
                     # Si l'utilisateur entre une lettre ou un caractère spécial
                     msg = QMessageBox(obj)
                     msg.setWindowTitle("Entrée non valide")
@@ -129,7 +131,9 @@ class CustomValidatorHandler(QObject):
 
             # Exemple pour `temp_ledit` et les champs numériques
             if obj.objectName() in ["temp_ledit", "tabg_ledit", "tabd_ledit", "bg_ledit", "weight_ledit"]:
-                if not (key.isdigit() or key == "." or event.key() in [Qt.Key_Backspace, Qt.Key_Delete, Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down, Qt.Key_Tab]):  # Si l'utilisateur entre une lettre ou un caractère spécial
+                if not (key.isdigit() or key == "." or event.key() in [Qt.Key_Backspace, Qt.Key_Delete, Qt.Key_Left,
+                                                                       Qt.Key_Right, Qt.Key_Up, Qt.Key_Down,
+                                                                       Qt.Key_Tab]):  # Si l'utilisateur entre une lettre ou un caractère spécial
                     # Si l'utilisateur entre une lettre ou un caractère spécial
                     msg = QMessageBox(obj)
                     msg.setWindowTitle("Entrée non valide")
@@ -556,12 +560,21 @@ class Ui_dashboard_window(object):
         self.commune_lbl.setObjectName("commune_lbl")
         self.gridLayout_2.addWidget(self.commune_lbl, 0, 5, 1, 1)
         self.name_ledit = QtWidgets.QLineEdit(self.gridLayoutWidget_2)
+        self.name_ledit.setStyleSheet("font: 10pt \"Century Gothic\";\n"
+                                      " background-color: rgb(186, 209, 248);\n"
+                                      "color: rgb(0, 1, 146);")
         self.name_ledit.setObjectName("name_ledit")
         self.gridLayout_2.addWidget(self.name_ledit, 0, 1, 1, 1)
         self.commune_ledit = QtWidgets.QLineEdit(self.gridLayoutWidget_2)
+        self.commune_ledit.setStyleSheet("font: 10pt \"Century Gothic\";\n"
+                                      " background-color: rgb(186, 209, 248);\n"
+                                      "color: rgb(0, 1, 146);")
         self.commune_ledit.setObjectName("commune_ledit")
         self.gridLayout_2.addWidget(self.commune_ledit, 0, 6, 1, 1)
         self.profession_ledit = QtWidgets.QLineEdit(self.gridLayoutWidget_2)
+        self.profession_ledit.setStyleSheet("font: 10pt \"Century Gothic\";\n"
+                                      " background-color: rgb(186, 209, 248);\n"
+                                      "color: rgb(0, 1, 146);")
         self.profession_ledit.setObjectName("profession_ledit")
         self.gridLayout_2.addWidget(self.profession_ledit, 1, 1, 1, 1)
         self.sector_spinBox = QtWidgets.QSpinBox(self.gridLayoutWidget_2)
@@ -603,6 +616,9 @@ class Ui_dashboard_window(object):
         self.gridLayout_2.addWidget(self.zone_lbl, 4, 5, 1, 1)
         self.phone_ledit = QtWidgets.QLineEdit(self.gridLayoutWidget_2)
         self.phone_ledit.setObjectName("phone_ledit")
+        self.phone_ledit.setStyleSheet("font: 10pt \"Century Gothic\";\n"
+                                      " background-color: rgb(186, 209, 248);\n"
+                                      "color: rgb(0, 1, 146);")
         self.gridLayout_2.addWidget(self.phone_ledit, 2, 6, 1, 1)
         self.name_lbl = QtWidgets.QLabel(self.gridLayoutWidget_2)
         self.name_lbl.setStyleSheet("font: 12pt \"Century Gothic\";\n"
@@ -1426,12 +1442,12 @@ class Ui_dashboard_window(object):
         # Recherche interactive
         def perform_search():
             """Recherche un utilisateur et remplit les champs."""
-            nonlocal old_login # utiliser la variable globale old_login
+            nonlocal old_login  # utiliser la variable globale old_login
             db = sqlite3.connect("croixg.db")
             cursor = db.cursor()
             cursor.execute("SELECT Login, MotDePasse, NiveauUtilisateur FROM cg_connexion WHERE Login LIKE ?",
                            (f"%{search_edit.text()}%",))
-            result = cursor.fetchone() # Récupérer un seul résultat
+            result = cursor.fetchone()  # Récupérer un seul résultat
 
             if result:
                 # Mettre à jour les champs avec les résultats de la base de données trouvés
@@ -1483,7 +1499,7 @@ class Ui_dashboard_window(object):
         close_btn = QPushButton("Fermer")
         close_btn.setStyleSheet("background-color: rgb(0, 1, 146); color: white;")
         close_btn.clicked.connect(popup.close)
-        close_btn.clicked.connect(lambda: popup.accept()) # Fermer la fenêtre de popup
+        close_btn.clicked.connect(lambda: popup.accept())  # Fermer la fenêtre de popup
         layout.addWidget(close_btn)
 
         popup.setLayout(layout)

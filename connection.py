@@ -69,6 +69,9 @@ class Main(QMainWindow, FORM_CLASS):
         self.comboBox_niveau.setItemText(1, _translate("LoginWindow", "Administrateur - 0"))
         self.comboBox_niveau.setItemText(2, _translate("LoginWindow", "Superviseur - 1"))
         self.comboBox_niveau.setItemText(3, _translate("LoginWindow", "Utilisateur - 2"))
+        self.comboBox_niveau.setStyleSheet(_translate("LoginWindow", "font: 10pt Montserrat;\n"
+                                                                     " background-color: rgb(186, 209, 248);\n"
+                                                                     "color: rgb(0, 1, 146);"))
         self.user_level_lbl.setText(_translate("LoginWindow", "Niveau"))
         self.login_lbl.setText(_translate("LoginWindow", "Login"))
         self.login_lineEdit.setPlaceholderText(_translate("LoginWindow", "Nom d\'utilisateur"))
